@@ -1,0 +1,17 @@
+.module {
+    overflow: hidden;
+}
+.module p {
+    margin: 0;
+}    
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+}
+.card-body{
+    padding-bottom: 0;
+}
+.card-img-top{
+    height: 100%;
+}
