@@ -59,20 +59,16 @@ router.post('/', upload , async (req, res) => {
     });
 })
 
-router.post('/:id', async (req,res) => {
+router.put('/:id', upload, async (req,res) => {
     const { id } = req.params;
-    const product = await pool.query("SELECT * FROM products WHERE id = ?", [ id ]);
-    console.log(product);
-    res.send(product);
-})
-
-router.put('/:id', async (req,res) => {
-    const { id } = req.params;
-    console.log("Se editó el producto con exito" + id);
-})
-
-router.delete('/:id', async (req,res) => {
-    const { id } = req.params;
+    const { nombreProducto, descripcionProducto, IdCategoria, IdEstado  } = req.body;
+    const newProduct = {
+        nombreProducto, 
+        descripcionProducto, 
+        nombreArchivo: req.file.filename,
+        IdEstado,
+        IdCategoria        
+    };
     const response = await pool.query("SELECT nombreArchivo FROM products WHERE id = ?", [ id ]);
     const rutaArchivo = path.join(__dirname,"../public/uploads/"+response[0].nombreArchivo);
     fs.unlink(rutaArchivo, (err) => {
@@ -82,8 +78,22 @@ router.delete('/:id', async (req,res) => {
             console.log(rutaArchivo+" ha sido eliminado");
         }
     })
-    await pool.query("DELETE FROM products WHERE id = ?",[ id ]);
-    res.redirect("/products");
+    await pool.query("UPDATE products set ? WHERE id = ?",[ newProduct , id ]);    
+    res.json({
+        data: newProduct,
+        succes: true,
+        message: "Producto Actualizado Con Éxito"
+    });
+})
+
+router.delete('/:id', async (req,res) => {
+    const { id } = req.params;
+    const IdEstado = 2;
+    await pool.query("UPDATE products set IdEstado = ? WHERE id = ?",[ IdEstado , id ]);    
+    res.json({
+        succes: true,
+        message: "Producto Eliminado Con Éxito"
+    });
 })
 
 module.exports = router;

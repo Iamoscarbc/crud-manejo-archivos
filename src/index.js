@@ -33,6 +33,7 @@ app.use((req, res, next ) => {
 })
 
 //Routes
+app.use('/estados', require('./routes/estados'));
 app.use('/categorias', require('./routes/categorias'));
 app.use('/products', require('./routes/products'));
 app.use('/uploads', require('./routes/uploads'));
