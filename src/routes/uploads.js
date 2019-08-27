@@ -7,7 +7,7 @@ const rutaUpload = path.join(__dirname, '../public/uploads');
 
 //Routes
 router.get('/', (req,res) => {
-    res.sendFile(path.join(rutaUpload));
+    res.sendFile(rutaUpload);
 })
 
 router.get('/:img', (req,res) => {
