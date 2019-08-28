@@ -2,6 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
+const fileupload = require('express-fileupload')
 
 //Initializations
 const app = express();
@@ -13,6 +14,10 @@ app.set('port',process.env.PORT || 4000);
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(fileupload({
+    useTempFiles: true
+}))
 
 //Global Variables
 app.use((req, res, next ) => {
@@ -33,10 +38,12 @@ app.use((req, res, next ) => {
 })
 
 //Routes
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'))
+})
 app.use('/estados', require('./routes/estados'));
 app.use('/categorias', require('./routes/categorias'));
 app.use('/products', require('./routes/products'));
-app.use('/uploads', require('./routes/uploads'));
 
 //Public
 app.use(express.static(path.join(__dirname, 'public')));
